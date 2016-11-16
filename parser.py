@@ -89,7 +89,7 @@ def p_term_text(p):
     p[0] = '<I>' + p[1] + '</I>'  # italicize text
 
 def p_error(p):
-    raise(SyntaxError(p))
+    raise SyntaxError(p)
 
 parser = yacc.yacc()
 
