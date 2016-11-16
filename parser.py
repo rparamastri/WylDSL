@@ -75,8 +75,7 @@ def p_content(p):
         p[0] = ""
 
 def p_term(p):
-    '''term : TEXT
-            | LPAREN
+    '''term : LPAREN
             | RPAREN
             | ENDL'''
     p[0] = p[1]
@@ -84,6 +83,10 @@ def p_term(p):
 def p_term_symbol(p):
     'term : SYMBOL'
     p[0] = Symbol(p[1]).get_symbol()
+
+def p_term_text(p):
+    'term : TEXT'
+    p[0] = '<I>' + p[1] + '</I>'  # italicize text
 
 def p_error(p):
     raise(SyntaxError(p))
