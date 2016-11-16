@@ -18,12 +18,13 @@ t_ignore = ' \t'
 
 def t_NODESTART(t): 
     r'>+'
-    t.value = len(t.value)  # count the number of >
+    # count the number of >
+    t.value = len(t.value)  # subtracts one so that the root is level 0
     return t
 
 def t_SYMBOL(t):
     r'\$\w+'
-    t.value = t.value[1:]
+    t.value = t.value[1:]  # removes the $ escape character
     return t
 
 def t_ENDL(t):
