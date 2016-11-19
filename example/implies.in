@@ -1,0 +1,12 @@
+>(A$implies B) $and (B $implies C)$check;
+ $not (A $implies C)$check;
+ A $implies B$check;
+ B $implies C;
+ A;
+ $not C
+ >>$not A;
+   $bottom
+ >>B;
+   $not B;
+   C;
+   $bottom
