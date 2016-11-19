@@ -19,7 +19,7 @@ t_ignore = ' \t'
 def t_NODESTART(t): 
     r'>+'
     # count the number of >
-    t.value = len(t.value)  # subtracts one so that the root is level 0
+    t.value = len(t.value)-1  # subtracts one so that the root is level 0
     return t
 
 def t_SYMBOL(t):
@@ -29,7 +29,7 @@ def t_SYMBOL(t):
 
 def t_ENDL(t):
     r';'
-    t.value = '\n'
+    t.value = '<BR/>'
     return t
 
 def t_newline(t):
@@ -44,7 +44,7 @@ lexer = lex.lex()
 
 ##############################   Yacc   ############################## 
 from ply import yacc
-from node import Node, Symbol
+from tree_structure import Node, Symbol
 
 #TODO: parentheses matching
 
