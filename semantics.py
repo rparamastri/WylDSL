@@ -2,7 +2,7 @@
 from tree_structure import Tree
 from graphviz import Graph
 
-def draw(tree, f_format, fname, clean):
+def draw(tree, f_format, fname, dot_file):
     g = Graph(format=f_format, node_attr={'shape':'plaintext'})
 
     for tree_node in tree.nodes:
@@ -11,5 +11,5 @@ def draw(tree, f_format, fname, clean):
     for tree_edge in tree.edges:
         g.edge(*tree_edge)
 
-    g.render(fname, cleanup=clean)
+    g.render(fname, cleanup = not dot_file)
 
