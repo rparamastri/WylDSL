@@ -46,7 +46,7 @@ class Node:
     def __init__(self,depth,line,text):
         self.depth = depth
         self.line  = line
-        self.text  = text.strip()
+        self.text  = text.rstrip('<BR/>')  # strip trailing newlines
 
     def __repr__(self):
         return "Node({}, {}, {})".format(self.depth, self.line, self.text)
