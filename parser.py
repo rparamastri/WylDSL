@@ -43,7 +43,7 @@ def t_ENDL(t):
     return t
 
 def t_SYMBOLCHARS(t):
-    r'[^\$>;\(\)\s]\S*'  # cannot define symbols starting with preceding tokens
+    r'[^\$>;\(\)(\/\/)\s]\S*'  # cannot define symbols starting with preceding tokens
     t.type = reserved.get(t.value, 'SYMBOLCHARS')
     return t
 
@@ -80,21 +80,20 @@ def p_user_symbol(p):
     if len(p) == 6:
         # trying to override a symbol that doesn't exist
         if p[4] not in Symbol.symbol_dict:
-            raise SyntaxError("Symbol ${} is not defined. Omit the keyword"
+            print("Warning! Symbol ${} is not defined. Omit the keyword"
                     " 'instead' to define a new symbol".format(p[4])
                     )
-        else:
-            Symbol.symbol_dict[p[4]] = p[2]
+        Symbol.symbol_dict[p[4]] = p[2]
     else:
+        # defining a command that already exists
         if p[4] in Symbol.symbol_dict:
-            raise SyntaxError("Symbol ${} already exists as {}. Append keyword"
+            print("Warning! Symbol ${} already exists as {}. Append keyword"
                     " 'instead' to override an existing symbol".format(
                         p[4],
                         Symbol(p[4]).get_symbol()
                         )
                     )
-        else:
-            Symbol.symbol_dict[p[4]] = p[2]
+        Symbol.symbol_dict[p[4]] = p[2]
                
 def p_nodes(p):
     '''nodes : node nodes
@@ -137,6 +136,6 @@ def p_term_text(p):
 def p_error(p):
     raise SyntaxError(p)
 
-parser = yacc.yacc()
 
+parser = yacc.yacc()
     
