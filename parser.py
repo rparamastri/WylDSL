@@ -90,7 +90,7 @@ def p_user_symbol(p):
             print("Warning! Symbol ${} already exists as {}.\nAppend keyword"
                     " 'instead' to override an existing symbol".format(
                         p[4],
-                        Symbol(p[4]).get_symbol()
+                        Symbol.symbol_dict[p[4]]
                         )
                     )
         Symbol.symbol_dict[p[4]] = p[2]
