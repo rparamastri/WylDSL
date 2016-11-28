@@ -1,17 +1,22 @@
 from ply import lex
 
+reserved = {
+        'use'     : 'USE',
+        'for'     : 'FOR',
+        'instead' : 'INSTEAD'
+        }
+
 tokens = [
         'SYMBOL',
         'TEXT',
         'NODESTART',
-        'LPAREN',
-        'RPAREN',
-        'ENDL'
-        ]
+        'ENDL',
+        'SYMBOLCHARS',
+        ] + list(reserved.values())
 
-t_TEXT   = r'\w+'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
+t_USE     = r'use'
+t_FOR     = r'for'
+t_INSTEAD = r'instead'
 
 t_ignore_comment = r'\/\/[^\n]*'
 t_ignore = ' \t'
@@ -27,9 +32,19 @@ def t_SYMBOL(t):
     t.value = t.value[1:]  # removes the $ escape character
     return t
 
+def t_TEXT(t):
+    r'[\(\)\w]+'
+    t.type = reserved.get(t.value, 'TEXT')
+    return t
+
 def t_ENDL(t):
     r';'
     t.value = '<BR/>'
+    return t
+
+def t_SYMBOLCHARS(t):
+    r'[^\$>;\(\)\s]\S*'  # cannot define symbols starting with preceding tokens
+    t.type = reserved.get(t.value, 'SYMBOLCHARS')
     return t
 
 def t_newline(t):
@@ -46,8 +61,41 @@ lexer = lex.lex()
 from ply import yacc
 from tree_structure import Node, Symbol
 
-#TODO: parentheses matching
+def p_program(p):
+    '''program : user_symbols nodes
+               | nodes'''
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
+def p_user_symbols(p):
+    '''user_symbols : user_symbol user_symbols
+                    | empty'''
+    pass
+
+def p_user_symbol(p):
+    '''user_symbol : USE SYMBOLCHARS FOR SYMBOL INSTEAD
+                   | USE SYMBOLCHARS FOR SYMBOL'''
+    if len(p) == 6:
+        # trying to override a symbol that doesn't exist
+        if p[4] not in Symbol.symbol_dict:
+            raise SyntaxError("Symbol ${} is not defined. Omit the keyword"
+                    " 'instead' to define a new symbol".format(p[4])
+                    )
+        else:
+            Symbol.symbol_dict[p[4]] = p[2]
+    else:
+        if p[4] in Symbol.symbol_dict:
+            raise SyntaxError("Symbol ${} already exists as {}. Append keyword"
+                    " 'instead' to override an existing symbol".format(
+                        p[4],
+                        Symbol(p[4]).get_symbol()
+                        )
+                    )
+        else:
+            Symbol.symbol_dict[p[4]] = p[2]
+               
 def p_nodes(p):
     '''nodes : node nodes
              | empty'''
@@ -75,9 +123,7 @@ def p_content(p):
         p[0] = ""
 
 def p_term(p):
-    '''term : LPAREN
-            | RPAREN
-            | ENDL'''
+    'term : ENDL'
     p[0] = p[1]
 
 def p_term_symbol(p):
