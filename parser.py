@@ -80,14 +80,14 @@ def p_user_symbol(p):
     if len(p) == 6:
         # trying to override a symbol that doesn't exist
         if p[4] not in Symbol.symbol_dict:
-            print("Warning! Symbol ${} is not defined. Omit the keyword"
-                    " 'instead' to define a new symbol".format(p[4])
+            print("Warning! Symbol ${} in line {} is not defined.\nOmit the "
+                   "keyword 'instead' to define a new symbol".format(p[4])
                     )
         Symbol.symbol_dict[p[4]] = p[2]
     else:
         # defining a command that already exists
         if p[4] in Symbol.symbol_dict:
-            print("Warning! Symbol ${} already exists as {}. Append keyword"
+            print("Warning! Symbol ${} already exists as {}.\nAppend keyword"
                     " 'instead' to override an existing symbol".format(
                         p[4],
                         Symbol(p[4]).get_symbol()
@@ -127,7 +127,16 @@ def p_term(p):
 
 def p_term_symbol(p):
     'term : SYMBOL'
-    p[0] = Symbol(p[1]).get_symbol()
+    try:
+        p[0] = Symbol.symbol_dict[p[1]]
+    except KeyError as err:
+        print('The symbol keyword "{}" in line {} is not defined.\n'
+              'Define symbol keywords by writing:\n'
+              '\tkeyword $<keyword> for <symbol>\n'
+              'where <symbol> is the literal string '
+              'or HTML decimal values'.format(p[1], p.lineno(1))
+             )
+        raise 
 
 def p_term_text(p):
     'term : TEXT'
