@@ -40,7 +40,7 @@ class Tree:
                     find_second_child[parent_index] = None
                     edges.append(edge)
         
-        return edges  #TODO: fix OOP
+        return edges
 
 class Node:
     def __init__(self,depth,line,text):
