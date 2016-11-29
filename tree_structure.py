@@ -61,7 +61,7 @@ class Node:
 
     def get_id(self):
         """Returns a unique id for the node based on depth and line number."""
-        return "d{}l{}".format(self.depth, self.line)
+        return "id{}".format(id(self))
 
 class Symbol:
     symbol_dict = {
