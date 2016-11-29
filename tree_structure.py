@@ -1,6 +1,7 @@
 class Tree:
     def __init__(self, node_list):
         self.nodes = node_list
+
         # check for trailing linebreaks
         trails = [x for x,y in enumerate(self.nodes) if y.text[-5:] == '<BR/>']
         if len(trails) > 0:
@@ -9,7 +10,9 @@ class Tree:
                         ', '.join(str(x) for x in trails)
                         )
                     )
-        self.edges = self.get_edges()
+
+        self.edges = []
+        self.get_edges()
 
     def get_edges(self):
         """
@@ -18,37 +21,29 @@ class Tree:
         Returns a list of edges (x,y) where x and y are indices of nodes in
         node_list.
         """
-        find_second_child = [None] * ( len(self.nodes)-2 )
-        edges = []
+        found_child = self.find_first_child()
+        self.find_parent(found_child)
 
-        # Iterate through all the nodes but the last two.
-        # The last two nodes could never have children.
-        for i in range(len(self.nodes)-2):
-            # if the next node is a child of this node
-            if self.nodes[i].depth + 1 == self.nodes[i+1].depth:
-                # store the depth of the second child
-                find_second_child[i] = self.nodes[i].depth + 1
+    def find_first_child(self):
+        found_child = [i for i,node in enumerate(self.nodes[:-2]) 
+                if node.depth+1 == self.nodes[i+1].depth
+                ]
+        for i in found_child:
+            self.edges.append((self.nodes[ i ].get_id(), 
+                               self.nodes[i+1].get_id()
+                              ))
 
-                edges.append((self.nodes[i].get_id(), self.nodes[i+1].get_id()))
-            
-            if self.nodes[i].depth in find_second_child:
-                parent_index = find_second_child.index(self.nodes[i].depth)
-                edge = (self.nodes[parent_index].get_id(), self.nodes[i].get_id())
-                # this node is the second child of some other node
-                if (edge not in edges) and (parent_index < i):
-                    find_second_child[parent_index] = None
-                    edges.append(edge)
+        return found_child
 
-        for i in range(len(self.nodes)-2,len(self.nodes)): 
-            if self.nodes[i].depth in find_second_child:
-                parent_index = find_second_child.index(self.nodes[i].depth)
-                edge = (self.nodes[parent_index].get_id(), self.nodes[i].get_id())
-                # this node is the second child of some other node
-                if (edge not in edges) and (parent_index < i):
-                    find_second_child[parent_index] = None
-                    edges.append(edge)
-        
-        return edges
+    def find_parent(self,found_child):
+        for i in found_child:
+            for node in self.nodes[i+2:]:
+                if node.depth == self.nodes[i].depth + 1:
+                    self.edges.append((self.nodes[i].get_id(), node.get_id()))
+                    break
+                elif node.depth == self.nodes[i].depth:
+                    print("Error! Cannot construct tree.")
+                    raise Exception
 
 class Node:
     def __init__(self,depth,line,text):
