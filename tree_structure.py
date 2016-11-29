@@ -3,13 +3,11 @@ class Tree:
         self.nodes = node_list
 
         # check for trailing linebreaks
-        trails = [x for x,y in enumerate(self.nodes) if y.text[-5:] == '<BR/>']
+        trails = [n.line for n in self.nodes if n.text[-5:] == '<BR/>']
         if len(trails) > 0:
             print("Warning! Linebreaks at the end of nodes may not be necessary.\n"
-                    "Nodes at line(s) {} have trailing linebreaks.".format(
-                        ', '.join(str(x) for x in trails)
-                        )
-                    )
+                    "Node(s) starting at line(s) {} have trailing "
+                    "linebreaks.".format( ', '.join(str(x) for x in trails)))
 
         self.edges = []
         self.get_edges()
