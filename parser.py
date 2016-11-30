@@ -62,8 +62,7 @@ from ply import yacc
 from tree_structure import Node, Symbol
 
 def p_program(p):
-    '''program : user_symbols nodes
-               | nodes'''
+    '''program : user_symbols '''
     if len(p) == 3:
         p[0] = p[2]
     else:
@@ -71,8 +70,11 @@ def p_program(p):
 
 def p_user_symbols(p):
     '''user_symbols : user_symbol user_symbols
-                    | empty'''
-    pass
+                    | nodes'''
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 def p_user_symbol(p):
     '''user_symbol : USE SYMBOLCHARS FOR SYMBOL INSTEAD
