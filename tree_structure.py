@@ -6,7 +6,7 @@ class Tree:
         trails = [n.line for n in self.nodes if n.text[-5:] == '<BR/>']
         if len(trails) > 0:
             print("Warning! Linebreaks at the end of nodes may not be necessary.\n"
-                    "Node(s) starting at line(s) {} have trailing "
+                    "\tNode(s) starting at line(s) {} have trailing "
                     "linebreaks.".format( ', '.join(str(x) for x in trails)))
 
         self.edges = []
