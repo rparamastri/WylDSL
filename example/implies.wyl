@@ -6,7 +6,7 @@
  $not C
  >>$not A;
    $bottom
- >>B;
+ >>B
    >>>$not B;
       $bottom
    >>>C;
