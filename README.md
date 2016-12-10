@@ -54,6 +54,45 @@ If they were *C*'s children, we would write
 The end of a line within a node is denoted by a semicolon.
 There are predefined symbols
 
+| Symbol | Key     |
+|:------:|---------|
+|   ✓    | check   |
+|   →    | implies |
+|   ↔    | iff     |
+|   ∃    | exists  |
+|   ∧    | and     |
+|   ∨    | or      |
+|   ∀    | forall  |
+|   ¬    | not     |
+|   ⊥    | bottom  |
+|   ⊤    | top     |
+
+The symbols can be invoked by writing `$<key>`.
+So `$check` results in ✓.
+
+Writing unicode characters in the text file also works for symbols.
+
+#### User-defined symbols
+The symbols must be defined at the start of the file, before the description of the tree.
+Define your own symbols by writing
+```
+use <symbol> for $<key>
+```
+Here, `<symbol>` could be a unicode character or an HTML code.
+For example,
+```
+use ∑ for $sum
+```
+With HTML code,
+```
+use &#8721; for $sum
+```
+
+To override existing keys, use the keyword instead.
+For example
+```
+use ⇒ for implies instead
+```
 
 ### Example
 The code
@@ -73,6 +112,7 @@ The code
       $bottom
 ```
 describes the following tree
+
 ![implies](example/implies.png)
 
 ### Drawing the tree
