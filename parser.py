@@ -141,5 +141,5 @@ def p_error(p):
     raise SyntaxError(p)
 
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False, write_tables=False)
     
