@@ -52,7 +52,7 @@ If they were *C*'s children, we would write
 
 ### Symbols
 The end of a line within a node is denoted by a semicolon.
-There are predefined symbols
+The language has some pre-defined symbols.
 
 | Symbol | Key     |
 |:------:|---------|
