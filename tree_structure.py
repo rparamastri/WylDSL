@@ -27,8 +27,8 @@ class Tree:
         Computes edges between parent nodes and their first child.
         Returns a list of indices of parents (nodes that are not leaves).
         """
-        # no need to examine the last two nodes, as they cannot be parents
-        found_child = [i for i, node in enumerate(self.nodes[:-2]) 
+        # no need to examine the last node, as it cannot be a parent
+        found_child = [i for i, node in enumerate(self.nodes[:-1]) 
                 if node.depth+1 == self.nodes[i+1].depth
                 ]
         for i in found_child:
@@ -43,17 +43,21 @@ class Tree:
         Given indices of parent (non-leaf) nodes, find their second child.
         """
         for i in found_child:
+            found_second_child = False
             # the node at i is itself and the node at i+1 is the first child
             # the second child is somewhere after those two
             for node in self.nodes[i+2:]:
                 # the first node encountered with the right depth 
                 if node.depth == self.nodes[i].depth + 1:
                     self.edges.append((self.nodes[i].get_id(), node.get_id()))
+                    found_second_child = True
                     break
                 # find a sibling node before the second child
                 elif node.depth == self.nodes[i].depth:
-                    print("Warning! This node only has one child.")
                     break
+
+            if not found_second_child:
+                print("Warning! This node only has one child.")
 
 class Node:
     def __init__(self,depth,line,text):
