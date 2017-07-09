@@ -6,7 +6,7 @@ class Tree:
         trails = [n.line for n in self.nodes if n.text[-5:] == '<BR/>']
         if len(trails) > 0:
             print("Warning! Linebreaks at the end of nodes may not be necessary.\n"
-                    "\tNode(s) starting at line(s) {} have trailing "
+                    "\tNode(s) defined at line(s) {} have trailing "
                     "linebreaks.".format(', '.join(str(x) for x in trails)))
 
         self.edges = []
@@ -42,6 +42,7 @@ class Tree:
         """
         Given indices of parent (non-leaf) nodes, find their second child.
         """
+        no_second_child = []
         for i in found_child:
             found_second_child = False
             # the node at i is itself and the node at i+1 is the first child
@@ -57,7 +58,11 @@ class Tree:
                     break
 
             if not found_second_child:
-                print("Warning! This node only has one child.")
+                no_second_child.append(self.nodes[i].line)
+
+        if len(no_second_child) > 0:
+            print("Warning! Node(s) defined at line(s) {} have only one child.".format(
+                ", ".join(str(x) for x in no_second_child)))
 
 class Node:
     def __init__(self,depth,line,text):
