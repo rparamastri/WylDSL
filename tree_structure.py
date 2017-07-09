@@ -7,7 +7,7 @@ class Tree:
         if len(trails) > 0:
             print("Warning! Linebreaks at the end of nodes may not be necessary.\n"
                     "\tNode(s) starting at line(s) {} have trailing "
-                    "linebreaks.".format( ', '.join(str(x) for x in trails)))
+                    "linebreaks.".format(', '.join(str(x) for x in trails)))
 
         self.edges = []
         self.get_edges()
@@ -28,7 +28,7 @@ class Tree:
         Returns a list of indices of parents (nodes that are not leaves).
         """
         # no need to examine the last two nodes, as they cannot be parents
-        found_child = [i for i,node in enumerate(self.nodes[:-2]) 
+        found_child = [i for i, node in enumerate(self.nodes[:-2]) 
                 if node.depth+1 == self.nodes[i+1].depth
                 ]
         for i in found_child:
@@ -52,8 +52,8 @@ class Tree:
                     break
                 # find a sibling node before the second child
                 elif node.depth == self.nodes[i].depth:
-                    print("Error! Cannot construct tree.")
-                    raise Exception
+                    print("Warning! This node only has one child.")
+                    break
 
 class Node:
     def __init__(self,depth,line,text):
