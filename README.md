@@ -50,6 +50,9 @@ If they were *C*'s children, we would write
 >>> E
 ```
 
+### Line breaks
+Within the text of a node, line breaks are denoted by `;`.
+
 ### Symbols
 The end of a line within a node is denoted by a semicolon.
 The language has some pre-defined symbols.
